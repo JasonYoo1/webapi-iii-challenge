@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
         })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
     res.status(201).json(req.user)
 });
 
@@ -43,7 +43,17 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
+    const userId = req.params.id;
 
+    userDb.getById(userId) 
+        .then(results => {
+            if (results === undefined) {
+                res.status(400).json({ message: "invalid user id" })
+            } else {
+                req.user = results
+                next();
+            }
+        })
 };
 
 function validateUser(req, res, next) {
