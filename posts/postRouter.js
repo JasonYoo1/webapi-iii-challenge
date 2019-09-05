@@ -3,19 +3,44 @@ const express = 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-
+    postDb.get()
+        .then(results => {
+            res.status(201).json(results)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
 });
 
-router.get('/:id', (req, res) => {
 
+router.get('/:id', validatePostId, (req, res) => {
+    postDb.getById(req.post.id) 
+        .then(results => {
+            res.status(201).json(results)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
 });
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validatePostId, (req, res) => {
+    postDb.remove(req.post.id) 
+        .then(results => {
+            res.status(200).json({statusCode: results})
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
 });
 
-router.put('/:id', (req, res) => {
-
+router.put('/:id', validatePostId, validatePost, (req, res) => {
+    postDb.update(req.post.id, req.body)
+        .then(results => {
+            res.status(200).json(results)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
 });
 
 // custom middleware
