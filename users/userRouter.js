@@ -69,8 +69,18 @@ function validateUserId(req, res, next) {
 };
 
 function validateUser(req, res, next) {
-
+    // console.log('request body from the validateUser function', !Object.keys(req.body).length)
+    if (req.body) {
+        res.status(400).json({ message: "error data" });
+    } else {
+        if (req.body.name) {
+            next();
+        } else {
+            res.status(400).json({ message: "errr on name" })
+        }
+    }
 };
+
 
 function validatePost(req, res, next) {
 
